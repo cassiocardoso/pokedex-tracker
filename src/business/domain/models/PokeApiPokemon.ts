@@ -1,42 +1,16 @@
+import { PokemonStat } from "@/business/domain/value-objects/PokemonStat";
+import { PokemonType } from "@/business/domain/value-objects/PokemonType";
+
 /**
  * Quick type definitions based on the PokeAPI response.
  * TODO: Improve by auto-generating all the types later
  */
 
-type PokemonStatName =
-  | "hp"
-  | "attack"
-  | "special-attack"
-  | "defense"
-  | "special-defense"
-  | "speed";
-
-type PokemonTypeName =
-  | "bug"
-  | "dark"
-  | "dragon"
-  | "electric"
-  | "fairy"
-  | "fighting"
-  | "fire"
-  | "flying"
-  | "ghost"
-  | "grass"
-  | "ground"
-  | "ice"
-  | "normal"
-  | "poison"
-  | "psychic"
-  | "rock"
-  | "steel"
-  | "water";
-
 interface PokeApiPokemonStatsAggregate {
   base_stat: number;
-  id: number;
   stat_id: number;
   pokemon_v2_stat: {
-    name: PokemonStatName;
+    name: PokemonStat;
   };
 }
 
@@ -45,7 +19,7 @@ interface PokeApiPokemonTypesAggregate {
   slot: number;
   type_id: number;
   pokemon_v2_type: {
-    name: PokemonTypeName;
+    name: PokemonType;
   };
 }
 
@@ -58,6 +32,7 @@ export default interface PokeApiPokemon {
   id: number;
   name: string;
   height: number;
+  weight: number;
   pokemon_species_id: number;
   pokemon_v2_pokemonstats_aggregate: {
     nodes: PokeApiPokemonStatsAggregate[];

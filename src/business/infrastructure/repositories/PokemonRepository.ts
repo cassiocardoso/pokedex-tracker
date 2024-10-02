@@ -29,11 +29,11 @@ export default class PokemonRepository implements IPokemonRepository {
           id
           name
           height
+          weight
           pokemon_species_id
           pokemon_v2_pokemonstats_aggregate {
             nodes {
               base_stat
-              id
               stat_id
               pokemon_v2_stat {
                 name
@@ -52,8 +52,8 @@ export default class PokemonRepository implements IPokemonRepository {
           }
           pokemon_v2_pokemonsprites_aggregate {
             nodes {
-              sprite_default: sprites(path: "front_default")
-              sprite_shiny: sprites(path: "front_shiny")
+              sprite_default: sprites(path: "other.home.front_default")
+              sprite_shiny: sprites(path: "other.home.front_shiny")
             }
           }
         }
@@ -72,6 +72,22 @@ export default class PokemonRepository implements IPokemonRepository {
     return {
       id: pokemon.id,
       name: pokemon.name,
+      height: pokemon.height / 10, // The height is in decimetres which is converted into metres by dividing by 10
+      weight: pokemon.weight / 10, // The weight is in hectograms which is converted into kilograms by dividing by 10
+      stats: pokemon.pokemon_v2_pokemonstats_aggregate.nodes.map((stat) => ({
+        id: stat.stat_id,
+        name: stat.pokemon_v2_stat.name,
+        value: stat.base_stat,
+      })),
+      types: pokemon.pokemon_v2_pokemontypes_aggregate.nodes.map(
+        (type) => type.pokemon_v2_type.name,
+      ),
+      sprites: {
+        default:
+          pokemon.pokemon_v2_pokemonsprites_aggregate.nodes[0].sprite_default,
+        shiny:
+          pokemon.pokemon_v2_pokemonsprites_aggregate.nodes[0].sprite_shiny,
+      },
     };
   }
 }

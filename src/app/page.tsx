@@ -7,7 +7,7 @@ import PokemonList from "@/app/components/PokemonList";
 
 export default function Home(): ReactElement {
   return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] p-8 lg:p-16">
+    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] p-8 md:p-16 flex flex-col gap-8 md:gap-16">
       <Header />
       <main>
         <PokemonList />

@@ -2,12 +2,14 @@ import { Fragment, ReactElement, useState } from "react";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import PokemonService from "@/business/application/services/PokemonService";
 import PokemonRepository from "@/business/infrastructure/repositories/PokemonRepository";
+import PokemonCard from "@/app/components/PokemonCard";
 
 const pokemonRepository = new PokemonRepository();
 const pokemonService = new PokemonService(pokemonRepository);
 
+const DEFAULT_LIST_LIMIT: number = 30;
+
 export default function PokemonList(): ReactElement {
-  const [limit, setLimit] = useState(30);
   const [offset, setOffset] = useState(0);
   const {
     data,
@@ -20,45 +22,46 @@ export default function PokemonList(): ReactElement {
     queryKey: ["pokemonList"],
     queryFn: async ({ pageParam }) =>
       pokemonService.getAllPokemon({
-        limit: pageParam.limit,
         offset: pageParam.offset,
       }),
-    initialPageParam: { limit, offset },
+    initialPageParam: { offset },
     getNextPageParam: (_, __, lastPageParam) => {
       return {
-        limit: lastPageParam.limit,
-        offset: lastPageParam.offset + lastPageParam.limit,
+        offset: lastPageParam.offset + DEFAULT_LIST_LIMIT,
       };
     },
     placeholderData: keepPreviousData,
   });
 
   const handleClickLoadMoreButton = async () => {
-    setOffset(offset + limit);
+    setOffset(offset + DEFAULT_LIST_LIMIT);
     await fetchNextPage();
   };
 
-  if (status === "pending") return <p>loading...</p>;
-  if (status === "error") return <p>Something went wrong! {error.message}</p>;
+  if (status === "pending") {
+    return <p>Loading...</p>;
+  }
+
+  if (status === "error") {
+    return <p>Something went wrong! Error: {error.message}</p>;
+  }
 
   return (
     <div>
-      <h2>Pokémon List</h2>
-
       {!data ? (
         <p>No Pokémon found</p>
       ) : (
         <div>
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {data.pages.map((group, i) => (
               <Fragment key={i}>
                 {group.map((pokemon) => (
-                  <div key={pokemon.id}>{pokemon.name}</div>
+                  <PokemonCard key={pokemon.id} pokemon={pokemon} />
                 ))}
               </Fragment>
             ))}
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-8">
             <button
               onClick={handleClickLoadMoreButton}
               className="bg-white p-2 rounded text-black"

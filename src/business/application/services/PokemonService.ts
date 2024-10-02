@@ -12,8 +12,8 @@ export default class PokemonService {
     limit = 30,
     offset = 0,
   }: {
-    limit: number;
-    offset: number;
+    limit?: number;
+    offset?: number;
   }): Promise<Pokemon[]> {
     return this.pokemonRepository.getAllPokemon({ limit, offset });
   }
