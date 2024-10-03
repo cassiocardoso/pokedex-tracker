@@ -1,4 +1,4 @@
-import Pokemon from "../models/Pokemon";
+import Pokemon from "@/business/domain/value-objects/Pokemon";
 
 export default interface IPokemonRepository {
   getAllPokemon({

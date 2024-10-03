@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { PokemonStatObject } from "@/business/domain/models/Pokemon";
+import { PokemonStatObject } from "@/business/domain/value-objects/Pokemon";
 import { PokemonStat } from "@/business/domain/value-objects/PokemonStat";
 
 interface Props {

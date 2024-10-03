@@ -1,6 +1,6 @@
 import { GraphQLClient, gql } from "graphql-request";
 import IPokemonRepository from "@/business/domain/repositories/IPokemonRepository";
-import Pokemon from "@/business/domain/models/Pokemon";
+import Pokemon from "@/business/domain/value-objects/Pokemon";
 import PokeApiPokemon from "@/business/domain/models/PokeApiPokemon";
 
 interface GetAllPokemonResponse {
@@ -88,6 +88,7 @@ export default class PokemonRepository implements IPokemonRepository {
         shiny:
           pokemon.pokemon_v2_pokemonsprites_aggregate.nodes[0].sprite_shiny,
       },
+      caughtAt: null,
     };
   }
 }

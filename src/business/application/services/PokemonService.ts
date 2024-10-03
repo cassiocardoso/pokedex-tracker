@@ -1,5 +1,5 @@
 import IPokemonRepository from "@/business/domain/repositories/IPokemonRepository";
-import Pokemon from "@/business/domain/models/Pokemon";
+import Pokemon from "@/business/domain/value-objects/Pokemon";
 
 export default class PokemonService {
   private pokemonRepository: IPokemonRepository;
