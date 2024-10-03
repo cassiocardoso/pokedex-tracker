@@ -4,17 +4,17 @@ import { ChangeEvent, ReactElement, useState } from "react";
 import Image from "next/image";
 import { useDebounce } from "use-debounce";
 import PokedexProgress from "@/app/components/PokedexProgress";
-import { usePokedex } from "@/services/PokedexContext";
 import PokemonCard from "@/app/components/PokemonCard";
+import SearchInput from "@/app/components/SearchInput";
 import SortingDropdown, {
   SortingOption,
   sortingOptions,
 } from "@/app/components/SortingDropdown";
+import { usePokedex } from "@/services/PokedexContext";
 import Pokemon from "@/business/domain/value-objects/Pokemon";
-import SearchInput from "@/app/components/SearchInput";
 
 export default function Pokedex(): ReactElement {
-  const { caughtPokemon } = usePokedex();
+  const { caughtPokemon, exportToCsv } = usePokedex();
   const [selectedSorting, setSelectedSorting] = useState<SortingOption>(
     sortingOptions.find(
       (sorting) => sorting.id === "caught-asc",
@@ -44,6 +44,12 @@ export default function Pokedex(): ReactElement {
           defaultSelectedItem={selectedSorting}
           setSelectedItem={setSelectedSorting}
         />
+        <button
+          className="bg-white p-2 rounded text-black w-96 hover:bg-opacity-90"
+          onClick={exportToCsv}
+        >
+          Export Pokédex to CSV
+        </button>
       </div>
       {!caughtPokemon.length ? (
         <div className="flex flex-col gap-4 items-center">

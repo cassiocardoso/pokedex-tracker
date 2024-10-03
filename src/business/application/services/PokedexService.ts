@@ -33,6 +33,10 @@ export default class PokedexService {
     return this.pokedex.getPokemon(pokemonId);
   }
 
+  getAllPokemon(): Pokemon[] {
+    return this.pokedex.getAll();
+  }
+
   getNumberOfSpeciesCaught(): number {
     return this.pokedex.getNumberOfSpeciesCaught();
   }
