@@ -30,11 +30,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] Add Pokémon to the Pokédex
 - [x] For Pokémon added to the Pokédex: show the date when it was added
 - [x] Show Pokédex progress
-- [ ] Pokédex page to show only caught Pokémon
+- [x] Pokédex page to show only caught Pokémon
 - [ ] Share any Pokémon with others
-- [ ] Have access to my Pokédex with limited internet connectivity
-- [ ] Manage my Pokédex
-  - Filter and sort Pokémon by: name, height, timestamp
+- [x] Have access to my Pokédex with limited internet connectivity
+- [x] Manage my Pokédex
+  - [x] Filter and sort Pokémon by: name, height, timestamp
   - Remove one or multiple Pokémon at once
   - Attach a free-text note to each Pokémon
 - [ ] Alternate between different view modes

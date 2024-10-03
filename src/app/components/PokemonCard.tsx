@@ -47,7 +47,7 @@ export default function PokemonCard({ pokemon }: Props): ReactElement {
   };
 
   return (
-    <div className="bg-white text-gray-800 relative overflow-hidden p-4 rounded z-0">
+    <div className="bg-white text-gray-800 relative overflow-hidden p-4 rounded-xl z-0">
       <span className="text-gray-300 font-black text-8xl absolute -top-4 -left-2 -z-10">
         {pokemon.id}
       </span>
