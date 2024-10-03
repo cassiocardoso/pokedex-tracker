@@ -5,7 +5,10 @@ export default class Pokedex {
 
   add(pokemon: Pokemon): void {
     if (!this.caughtPokemon.has(pokemon)) {
-      this.caughtPokemon.add(pokemon);
+      this.caughtPokemon.add({
+        ...pokemon,
+        caughtAt: new Date(),
+      });
     }
   }
 
@@ -22,7 +25,7 @@ export default class Pokedex {
     return Array.from(this.caughtPokemon);
   }
 
-  getNUmberOfSpeciesCaught(): number {
+  getNumberOfSpeciesCaught(): number {
     return this.caughtPokemon.size;
   }
 

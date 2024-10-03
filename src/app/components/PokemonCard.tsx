@@ -5,7 +5,7 @@ import capitalize from "@/utils/capitalize";
 import TypeBadge from "@/app/components/TypeBadge";
 import PokemonStats from "@/app/components/PokemonStats";
 import Pokemon from "@/business/domain/value-objects/Pokemon";
-import usePokedex from "@/hooks/usePokedex";
+import { usePokedex } from "@/services/PokedexContext";
 import formatDate from "@/utils/formatDate";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function PokemonCard({ pokemon }: Props): ReactElement {
-  const { savePokemon, removePokemon, isPokemonCaught, getPokemon } =
+  const { catchPokemon, releasePokemon, isPokemonCaught, getPokemon } =
     usePokedex();
   const initialIsCaught = isPokemonCaught(pokemon.id);
   const pokemonCaughtDate = getPokemon(pokemon.id)?.caughtAt;
@@ -24,14 +24,14 @@ export default function PokemonCard({ pokemon }: Props): ReactElement {
     setIsCaught(updatedIsCaught);
 
     if (updatedIsCaught) {
-      savePokemon(pokemon);
+      catchPokemon(pokemon);
       toast.success(`${capitalize(pokemon.name)} has been caught!`, {
         icon: () => (
           <Image src="/pokeball.svg" alt="pokeball" height={24} width={24} />
         ),
       });
     } else {
-      removePokemon(pokemon.id);
+      releasePokemon(pokemon.id);
       toast.info(`${capitalize(pokemon.name)} has been released!`, {
         icon: () => (
           <Image
@@ -79,6 +79,7 @@ export default function PokemonCard({ pokemon }: Props): ReactElement {
       <div className="flex w-full gap-4">
         <div className="flex-1 flex flex-col justify-between">
           <Image
+            priority
             src={pokemon.sprites.default}
             alt={pokemon.name}
             height={512}

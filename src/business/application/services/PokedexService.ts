@@ -11,6 +11,10 @@ export default class PokedexService {
     this.pokedex = this.pokedexRepository.load();
   }
 
+  save() {
+    this.pokedexRepository.save(this.pokedex);
+  }
+
   addPokemon(pokemon: Pokemon): void {
     this.pokedex.add(pokemon);
     this.pokedexRepository.save(this.pokedex);
@@ -27,6 +31,10 @@ export default class PokedexService {
 
   getPokemon(pokemonId: number): Pokemon | undefined {
     return this.pokedex.getPokemon(pokemonId);
+  }
+
+  getNumberOfSpeciesCaught(): number {
+    return this.pokedex.getNumberOfSpeciesCaught();
   }
 
   isPokemonCaught(pokemonId: number): boolean {

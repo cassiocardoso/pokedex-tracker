@@ -29,7 +29,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - Stats: HP, Attack, Defense, Sp. Attack, Sp. Defense, Speed
 - [x] Add Pokémon to the Pokédex
 - [x] For Pokémon added to the Pokédex: show the date when it was added
-- [ ] Show Pokédex progress
+- [x] Show Pokédex progress
 - [ ] Pokédex page to show only caught Pokémon
 - [ ] Share any Pokémon with others
 - [ ] Have access to my Pokédex with limited internet connectivity

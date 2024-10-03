@@ -16,8 +16,8 @@ export default class PokedexRepository implements IPokedexRepository {
   }
 
   load(): Pokedex {
-    const storedData = localStorage.getItem(this.STORAGE_KEY);
     const pokedex = new Pokedex();
+    const storedData = localStorage?.getItem(this.STORAGE_KEY);
 
     if (storedData) {
       const parsedData = JSON.parse(storedData);
