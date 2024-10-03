@@ -40,4 +40,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Alternate between different view modes
   - Analytical view (e.g.: table) is mandatory
   - Alternate view (e.g.: grid) is mobile devices
-- [ ] Export all Pokémons from the Pokédex to CSV
+- [x] Export all Pokémons from the Pokédex to CSV

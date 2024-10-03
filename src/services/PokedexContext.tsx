@@ -34,7 +34,7 @@ export const usePokedex = (): IPokedexContext => {
 };
 
 const pokedexRepository = new PokedexRepository();
-const pokedexService = new PokedexService(pokedexRepository);
+let pokedexService: PokedexService;
 
 export default function PokedexProvider({ children }: { children: ReactNode }) {
   const [pokedex, setPokedex] = useState<Pokedex>(new Pokedex());
@@ -43,6 +43,7 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
 
   // Hydrate context data from localStorage
   useEffect(() => {
+    pokedexService = new PokedexService(pokedexRepository);
     const loadedPokedex = pokedexService.get();
 
     setPokedex(loadedPokedex);
