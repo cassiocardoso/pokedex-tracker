@@ -19,4 +19,5 @@ export default interface Pokemon {
     shiny: string;
   };
   caughtAt: Date | null;
+  note?: string;
 }

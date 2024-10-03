@@ -40,4 +40,24 @@ export default class Pokedex {
 
     return pokemonArray.some((pokemon) => pokemon.id === pokemonId);
   }
+
+  updatePokemonNote(pokemonId: number, note: string): void {
+    const pokemonArray = Array.from(this.caughtPokemon);
+
+    const pokemon = pokemonArray.find((pokemon) => pokemon.id === pokemonId);
+
+    if (!pokemon) return;
+
+    pokemon.note = note;
+  }
+
+  getPokemonNote(pokemonId: number): string | undefined {
+    const pokemonArray = Array.from(this.caughtPokemon);
+
+    const pokemon = pokemonArray.find((pokemon) => pokemon.id === pokemonId);
+
+    if (!pokemon) return;
+
+    return pokemon.note;
+  }
 }

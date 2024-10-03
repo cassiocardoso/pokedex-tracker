@@ -4,7 +4,6 @@ import { ChangeEvent, ReactElement, useState } from "react";
 import Image from "next/image";
 import { useDebounce } from "use-debounce";
 import PokedexProgress from "@/app/components/PokedexProgress";
-import PokemonCard from "@/app/components/PokemonCard";
 import SearchInput from "@/app/components/SearchInput";
 import SortingDropdown, {
   SortingOption,
@@ -12,6 +11,7 @@ import SortingDropdown, {
 } from "@/app/components/SortingDropdown";
 import { usePokedex } from "@/services/PokedexContext";
 import Pokemon from "@/business/domain/value-objects/Pokemon";
+import PokedexCard from "@/app/components/PokedexCard";
 
 export default function Pokedex(): ReactElement {
   const { caughtPokemon, exportToCsv } = usePokedex();
@@ -66,7 +66,7 @@ export default function Pokedex(): ReactElement {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {sortedPokemon.map((pokemon) => (
-            <PokemonCard key={pokemon.id} pokemon={pokemon} />
+            <PokedexCard key={pokemon.id} pokemon={pokemon} />
           ))}
         </div>
       )}

@@ -44,4 +44,13 @@ export default class PokedexService {
   isPokemonCaught(pokemonId: number): boolean {
     return this.pokedex.isPokemonCaught(pokemonId);
   }
+
+  updatePokemonNote(pokemonId: number, note: string): void {
+    this.pokedex.updatePokemonNote(pokemonId, note);
+    this.pokedexRepository.save(this.pokedex);
+  }
+
+  getPokemonNote(pokemonId: number): string | undefined {
+    return this.pokedex.getPokemonNote(pokemonId);
+  }
 }

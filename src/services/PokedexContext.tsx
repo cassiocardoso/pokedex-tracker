@@ -19,6 +19,8 @@ interface IPokedexContext {
   caughtPokemon: Pokemon[];
   numberOfSpeciesCaught: number;
   exportToCsv: () => void;
+  updatePokemonNote: (pokemonId: number, note: string) => void;
+  getPokemonNote: (pokemonId: number) => string | undefined;
 }
 
 const PokedexContext = createContext<IPokedexContext | undefined>(undefined);
@@ -123,6 +125,15 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
     URL.revokeObjectURL(url);
   };
 
+  const updatePokemonNote = (pokemonId: number, note: string) => {
+    pokedexService.updatePokemonNote(pokemonId, note);
+    pokedexService.save();
+  };
+
+  const getPokemonNote = (pokemonId: number) => {
+    return pokedexService.getPokemonNote(pokemonId);
+  };
+
   return (
     <PokedexContext.Provider
       value={{
@@ -133,6 +144,8 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
         numberOfSpeciesCaught,
         isPokemonCaught,
         exportToCsv,
+        updatePokemonNote,
+        getPokemonNote,
       }}
     >
       {children}
