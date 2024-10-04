@@ -12,7 +12,12 @@ export default class PokedexService {
   }
 
   save() {
-    this.pokedexRepository.save(this.pokedex);
+    try {
+      this.pokedexRepository.save(this.pokedex);
+    } catch (error) {
+      console.error("Failed to save the Pokédex to the repository:", error);
+      throw new Error("Could not save the Pokédex. Please try again.");
+    }
   }
 
   get(): Pokedex {
@@ -20,28 +25,73 @@ export default class PokedexService {
   }
 
   getPokemon(pokemonId: number): Pokemon | undefined {
-    return this.pokedex.getPokemon(pokemonId);
+    try {
+      return this.pokedex.getPokemon(pokemonId);
+    } catch (error) {
+      console.error(`Failed to retrieve Pokémon with ID ${pokemonId}:`, error);
+      throw new Error("An error occurred while retrieving the Pokémon.");
+    }
   }
 
   getAllPokemon(): Pokemon[] {
-    return this.pokedex.getAll();
+    try {
+      return this.pokedex.getAll();
+    } catch (error) {
+      console.error("Failed to retrieve all Pokémon from the Pokédex:", error);
+      throw new Error("An error occurred while retrieving the Pokémon list.");
+    }
   }
 
   isPokemonCaught(pokemonId: number): boolean {
-    return this.pokedex.isPokemonCaught(pokemonId);
+    try {
+      return this.pokedex.isPokemonCaught(pokemonId);
+    } catch (error) {
+      console.error(
+        `Failed to check if Pokémon with ID ${pokemonId} is caught:`,
+        error,
+      );
+      throw new Error(
+        "An error occurred while checking if the Pokémon is caught.",
+      );
+    }
   }
 
   updatePokemonNote(pokemonId: number, note: string): void {
-    this.pokedex.updatePokemonNote(pokemonId, note);
-    this.pokedexRepository.save(this.pokedex);
+    if (!note) {
+      throw new Error("Invalid note provided.");
+    }
+
+    try {
+      this.pokedex.updatePokemonNote(pokemonId, note);
+      this.save();
+    } catch (error) {
+      console.error(
+        `Failed to update the note for Pokémon with ID ${pokemonId}:`,
+        error,
+      );
+      throw new Error("An error occurred while updating the Pokémon note.");
+    }
   }
 
   getPokemonNote(pokemonId: number): string | undefined {
-    return this.pokedex.getPokemonNote(pokemonId);
+    try {
+      return this.pokedex.getPokemonNote(pokemonId);
+    } catch (error) {
+      console.error(
+        `Failed to retrieve the note for Pokémon with ID ${pokemonId}:`,
+        error,
+      );
+      throw new Error("An error occurred while retrieving the Pokémon note.");
+    }
   }
 
   serialize(): string {
-    return encodeURIComponent(JSON.stringify(this.pokedex.getAll()));
+    try {
+      return encodeURIComponent(JSON.stringify(this.pokedex.getAll()));
+    } catch (error) {
+      console.error("Failed to serialize the Pokédex:", error);
+      throw new Error("An error occurred while serializing the Pokédex.");
+    }
   }
 
   deserialize(data: string): Pokemon[] {
