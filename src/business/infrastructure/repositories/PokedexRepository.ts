@@ -11,20 +11,33 @@ export default class PokedexRepository implements IPokedexRepository {
   private readonly STORAGE_KEY = "userPokedex";
 
   save(pokedex: Pokedex) {
-    const data = JSON.stringify(pokedex.getAll());
-    localStorage.setItem(this.STORAGE_KEY, data);
+    try {
+      const data = JSON.stringify(pokedex.getAll());
+      localStorage.setItem(this.STORAGE_KEY, data);
+    } catch (error) {
+      console.log("Failed to save Pokédex to localStorage:", error);
+      throw new Error("An error occurred while saving the Pokédex");
+    }
   }
 
   load(): Pokedex {
     const pokedex = new Pokedex();
-    const storedData = localStorage?.getItem(this.STORAGE_KEY);
+    try {
+      const storedData = localStorage?.getItem(this.STORAGE_KEY);
 
-    if (storedData) {
+      if (!storedData) {
+        console.info("No Pokédex data found in localStorage");
+        return pokedex;
+      }
+
       const parsedData = JSON.parse(storedData);
 
       parsedData.forEach((pokemon: Pokemon) => {
         pokedex.add(pokemon);
       });
+    } catch (error) {
+      console.error("Failed to load Pokédex data from localStorage:", error);
+      throw new Error("An error occurred while loading the Pokédex");
     }
 
     return pokedex;

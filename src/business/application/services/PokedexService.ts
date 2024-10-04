@@ -15,16 +15,6 @@ export default class PokedexService {
     this.pokedexRepository.save(this.pokedex);
   }
 
-  addPokemon(pokemon: Pokemon): void {
-    this.pokedex.add(pokemon);
-    this.pokedexRepository.save(this.pokedex);
-  }
-
-  removePokemon(pokemonId: number): void {
-    this.pokedex.remove(pokemonId);
-    this.pokedexRepository.save(this.pokedex);
-  }
-
   get(): Pokedex {
     return this.pokedex;
   }
@@ -35,10 +25,6 @@ export default class PokedexService {
 
   getAllPokemon(): Pokemon[] {
     return this.pokedex.getAll();
-  }
-
-  getNumberOfSpeciesCaught(): number {
-    return this.pokedex.getNumberOfSpeciesCaught();
   }
 
   isPokemonCaught(pokemonId: number): boolean {

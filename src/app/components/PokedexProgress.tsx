@@ -1,7 +1,7 @@
 import { usePokedex } from "@/services/PokedexContext";
 import { usePathname } from "next/navigation";
 
-const TOTAL_NUMBER_OF_POKEMON_SPECIES = 1025;
+const TOTAL_NUMBER_OF_POKEMON_SPECIES: number = 1025;
 
 export default function PokedexProgress() {
   const { numberOfSpeciesCaught } = usePokedex();
