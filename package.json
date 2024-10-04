@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.56.2",
@@ -23,6 +24,7 @@
     "use-debounce": "^10.0.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.47.2",
     "@tanstack/eslint-plugin-query": "^5.58.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
