@@ -52,9 +52,9 @@ export default function SortingDropdown({
   return (
     <div className="w-full lg:max-w-80">
       <div className="flex flex-col gap-1">
-        <label {...getLabelProps()}>Sort your Pokédex:</label>
+        <label {...getLabelProps()}>Sort Pokédex:</label>
         <div
-          className="p-2 bg-white rounded w-full flex justify-between cursor-pointer text-gray-800"
+          className="p-2 bg-white rounded w-full flex justify-between cursor-pointer text-gray-800 hover:bg-opacity-90"
           {...getToggleButtonProps()}
         >
           <span>{selectedItem ? selectedItem.label : "Oldest Caught"}</span>

@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { toast } from "react-toastify";
 import PokedexRepository from "@/business/infrastructure/repositories/PokedexRepository";
 import PokedexService from "@/business/application/services/PokedexService";
 import Pokemon from "@/business/domain/value-objects/Pokemon";
@@ -21,6 +22,7 @@ interface IPokedexContext {
   exportToCsv: () => void;
   updatePokemonNote: (pokemonId: number, note: string) => void;
   getPokemonNote: (pokemonId: number) => string | undefined;
+  sharePokedex: () => void;
 }
 
 const PokedexContext = createContext<IPokedexContext | undefined>(undefined);
@@ -134,6 +136,15 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
     return pokedexService.getPokemonNote(pokemonId);
   };
 
+  const sharePokedex = async () => {
+    const serializedData = pokedexService.serialize();
+    const link = `${window.location.origin}/share?data=${serializedData}`;
+
+    await navigator.clipboard.writeText(link);
+
+    toast.success("Pokédex link copied to clipboard");
+  };
+
   return (
     <PokedexContext.Provider
       value={{
@@ -146,6 +157,7 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
         exportToCsv,
         updatePokemonNote,
         getPokemonNote,
+        sharePokedex,
       }}
     >
       {children}

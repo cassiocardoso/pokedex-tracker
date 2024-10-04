@@ -1,7 +1,8 @@
 "use client";
 
-import { ChangeEvent, ReactElement, useState } from "react";
+import { ChangeEvent, ReactElement, useEffect, useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useDebounce } from "use-debounce";
 import PokedexProgress from "@/app/components/PokedexProgress";
 import SearchInput from "@/app/components/SearchInput";
@@ -9,12 +10,14 @@ import SortingDropdown, {
   SortingOption,
   sortingOptions,
 } from "@/app/components/SortingDropdown";
-import { usePokedex } from "@/services/PokedexContext";
+import Pokemon from "@/business/domain/value-objects/Pokemon";
 import PokedexCard from "@/app/components/PokedexCard";
+import PokedexService from "@/business/application/services/PokedexService";
+import PokedexRepository from "@/business/infrastructure/repositories/PokedexRepository";
 import sortPokedex from "@/utils/sortPokedex";
 
 export default function Pokedex(): ReactElement {
-  const { caughtPokemon, exportToCsv, sharePokedex } = usePokedex();
+  const [sharedPokedex, setSharedPokedex] = useState<Pokemon[]>([]);
   const [selectedSorting, setSelectedSorting] = useState<SortingOption>(
     sortingOptions.find(
       (sorting) => sorting.id === "caught-asc",
@@ -22,12 +25,25 @@ export default function Pokedex(): ReactElement {
   );
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const data = searchParams.get("data");
+
+    if (data) {
+      const pokedexRepository = new PokedexRepository();
+      const pokedexService = new PokedexService(pokedexRepository);
+      const pokedex = pokedexService.deserialize(data);
+
+      setSharedPokedex(pokedex);
+    }
+  }, [searchParams]);
 
   const sortedPokemon = debouncedSearchTerm
-    ? sortPokedex(caughtPokemon, selectedSorting).filter((pokemon) =>
+    ? sortPokedex(sharedPokedex, selectedSorting).filter((pokemon) =>
         pokemon.name.includes(debouncedSearchTerm),
       )
-    : sortPokedex(caughtPokemon, selectedSorting);
+    : sortPokedex(sharedPokedex, selectedSorting);
 
   const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -44,20 +60,8 @@ export default function Pokedex(): ReactElement {
           defaultSelectedItem={selectedSorting}
           setSelectedItem={setSelectedSorting}
         />
-        <button
-          className="bg-white p-2 rounded text-black w-96 hover:bg-opacity-90"
-          onClick={exportToCsv}
-        >
-          Export Pokédex to CSV
-        </button>
-        <button
-          className="border border-white p-2 rounded text-white w-96 hover:bg-gray-800"
-          onClick={sharePokedex}
-        >
-          Share Pokédex
-        </button>
       </div>
-      {!caughtPokemon.length ? (
+      {!sharedPokedex.length ? (
         <div className="flex flex-col gap-4 items-center">
           <Image
             src="/pokeball.svg"

@@ -53,4 +53,16 @@ export default class PokedexService {
   getPokemonNote(pokemonId: number): string | undefined {
     return this.pokedex.getPokemonNote(pokemonId);
   }
+
+  serialize(): string {
+    return encodeURIComponent(JSON.stringify(this.pokedex.getAll()));
+  }
+
+  deserialize(data: string): Pokemon[] {
+    try {
+      return JSON.parse(decodeURIComponent(data));
+    } catch {
+      throw new Error("Invalid Pokédex data");
+    }
+  }
 }

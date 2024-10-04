@@ -4,6 +4,7 @@ import capitalize from "@/utils/capitalize";
 import Pokemon from "@/business/domain/value-objects/Pokemon";
 import { useDebounce } from "use-debounce";
 import { usePokedex } from "@/services/PokedexContext";
+import { usePathname } from "next/navigation";
 
 export default function PokedexCard({
   pokemon,
@@ -14,6 +15,8 @@ export default function PokedexCard({
   const initialNote = getPokemonNote(pokemon.id);
   const [note, setNote] = useState<string | undefined>(initialNote);
   const [debouncedNote] = useDebounce(note, 300);
+  const pathname = usePathname();
+  const isSharePage = pathname.startsWith("/share");
 
   useEffect(() => {
     if (debouncedNote) {
@@ -41,6 +44,7 @@ export default function PokedexCard({
           rows={5}
           defaultValue={initialNote}
           onChange={handleChangeNote}
+          disabled={isSharePage}
         />
       </div>
     </div>

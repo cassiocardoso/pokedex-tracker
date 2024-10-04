@@ -1,13 +1,18 @@
 import { usePokedex } from "@/services/PokedexContext";
+import { usePathname } from "next/navigation";
 
 const TOTAL_NUMBER_OF_POKEMON_SPECIES = 1025;
 
 export default function PokedexProgress() {
   const { numberOfSpeciesCaught } = usePokedex();
+  const pathname = usePathname();
+  const isSharePage = pathname.startsWith("/share");
 
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-2xl font-bold">Your Progress:</h2>
+      <h2 className="text-2xl font-bold">
+        {isSharePage ? "Progress:" : "Your Progress:"}
+      </h2>
 
       <div className="relative flex items-center">
         <div className="relative w-full h-4 overflow-hidden rounded-3xl bg-gray-100">

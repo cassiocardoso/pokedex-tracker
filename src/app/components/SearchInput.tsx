@@ -14,7 +14,7 @@ export default function SearchInput({
         defaultValue=""
         onChange={onChange}
         placeholder="Search for a Pokémon..."
-        className="p-2 bg-white rounded flex justify-between cursor-pointer text-gray-800"
+        className="p-2 bg-white rounded flex justify-between cursor-pointer text-gray-800 hover:bg-opacity-90"
       />
     </div>
   );
