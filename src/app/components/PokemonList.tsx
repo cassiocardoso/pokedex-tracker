@@ -1,5 +1,6 @@
-import { Fragment, ReactElement } from "react";
+import { Fragment, ReactElement, useEffect } from "react";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
 import PokemonService from "@/business/application/services/PokemonService";
 import PokemonRepository from "@/business/infrastructure/repositories/PokemonRepository";
 import PokemonCard from "@/app/components/PokemonCard";
@@ -10,6 +11,7 @@ const pokemonService = new PokemonService(pokemonRepository);
 const DEFAULT_LIST_LIMIT: number = 30;
 
 export default function PokemonList(): ReactElement {
+  const { ref, inView } = useInView();
   const {
     data,
     error,
@@ -36,6 +38,12 @@ export default function PokemonList(): ReactElement {
     await fetchNextPage();
   };
 
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, inView]);
+
   if (status === "pending") {
     return <p>Loading...</p>;
   }
@@ -61,6 +69,7 @@ export default function PokemonList(): ReactElement {
           </div>
           <div className="flex justify-center mt-8">
             <button
+              ref={ref}
               onClick={handleClickLoadMoreButton}
               className="bg-white p-2 rounded text-black"
               disabled={isFetchingNextPage || !hasNextPage}
