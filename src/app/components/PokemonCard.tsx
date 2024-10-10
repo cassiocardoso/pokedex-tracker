@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useCallback, useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import capitalize from "@/utils/capitalize";
@@ -13,15 +13,12 @@ interface Props {
 }
 
 export default function PokemonCard({ pokemon }: Props): ReactElement {
-  const { catchPokemon, releasePokemon, isPokemonCaught, getPokemon } =
-    usePokedex();
-  const initialIsCaught = isPokemonCaught(pokemon.id);
+  const { catchPokemon, releasePokemon, getPokemon } = usePokedex();
+  const initialIsCaught = Boolean(getPokemon(pokemon.id)?.caughtAt);
   const pokemonCaughtDate = getPokemon(pokemon.id)?.caughtAt;
-  const [isCaught, setIsCaught] = useState(initialIsCaught);
 
-  const handleClickPokeball = () => {
-    const updatedIsCaught = !isCaught;
-    setIsCaught(updatedIsCaught);
+  const handleClickPokeBall = useCallback(() => {
+    const updatedIsCaught = !initialIsCaught;
 
     if (updatedIsCaught) {
       catchPokemon(pokemon);
@@ -44,7 +41,7 @@ export default function PokemonCard({ pokemon }: Props): ReactElement {
         ),
       });
     }
-  };
+  }, [initialIsCaught, catchPokemon, pokemon, releasePokemon]);
 
   return (
     <div className="bg-white text-gray-800 relative overflow-hidden p-4 rounded-xl z-0">
@@ -53,14 +50,14 @@ export default function PokemonCard({ pokemon }: Props): ReactElement {
       </span>
       <div
         className="absolute cursor-pointer top-2 right-2"
-        onClick={handleClickPokeball}
+        onClick={handleClickPokeBall}
       >
         <Image
           src="/pokeball.svg"
           alt="pokeball"
           height={32}
           width={32}
-          className={!isCaught ? "grayscale" : ""}
+          className={!initialIsCaught ? "grayscale" : ""}
         />
       </div>
       <div className="flex items-center gap-4">

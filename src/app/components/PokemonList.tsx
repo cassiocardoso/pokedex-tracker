@@ -10,7 +10,6 @@ const pokemonService = new PokemonService(pokemonRepository);
 const DEFAULT_LIST_LIMIT: number = 30;
 
 export default function PokemonList(): ReactElement {
-  const [offset, setOffset] = useState(0);
   const {
     data,
     error,
@@ -24,7 +23,7 @@ export default function PokemonList(): ReactElement {
       pokemonService.getAllPokemon({
         offset: pageParam.offset,
       }),
-    initialPageParam: { offset },
+    initialPageParam: { offset: 0 },
     getNextPageParam: (_, __, lastPageParam) => {
       return {
         offset: lastPageParam.offset + DEFAULT_LIST_LIMIT,
@@ -34,7 +33,6 @@ export default function PokemonList(): ReactElement {
   });
 
   const handleClickLoadMoreButton = async () => {
-    setOffset(offset + DEFAULT_LIST_LIMIT);
     await fetchNextPage();
   };
 

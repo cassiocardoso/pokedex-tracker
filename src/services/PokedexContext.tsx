@@ -43,7 +43,6 @@ let pokedexService: PokedexService;
 export default function PokedexProvider({ children }: { children: ReactNode }) {
   const [pokedex, setPokedex] = useState<Pokedex>(new Pokedex());
   const [caughtPokemon, setCaughtPokemon] = useState<Pokemon[]>([]);
-  const [numberOfSpeciesCaught, setNumberOfSpeciesCaught] = useState(0);
 
   // Hydrate context data from localStorage
   useEffect(() => {
@@ -52,7 +51,6 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
 
     setPokedex(loadedPokedex);
     setCaughtPokemon(loadedPokedex.getAll());
-    setNumberOfSpeciesCaught(loadedPokedex.getNumberOfSpeciesCaught());
   }, []);
 
   const catchPokemon = useCallback(
@@ -62,7 +60,6 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
 
         const updatedPokemonList = [...pokedex.getAll()];
         setCaughtPokemon(updatedPokemonList);
-        setNumberOfSpeciesCaught(updatedPokemonList.length);
 
         pokedexService.save();
       }
@@ -76,16 +73,18 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
 
       const updatedPokemonList = [...pokedex.getAll()];
       setCaughtPokemon(updatedPokemonList);
-      setNumberOfSpeciesCaught(updatedPokemonList.length);
 
       pokedexService.save();
     },
     [pokedex],
   );
 
-  const getPokemon = (pokemonId: number): Pokemon | undefined => {
-    return pokedexService.getPokemon(pokemonId);
-  };
+  const getPokemon = useCallback<(pokemonId: number) => Pokemon | undefined>(
+    (pokemonId: number) => {
+      return pokedexService.getPokemon(pokemonId);
+    },
+    [],
+  );
 
   const isPokemonCaught = (pokemonId: number): boolean => {
     return pokedexService.isPokemonCaught(pokemonId);
@@ -152,7 +151,7 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
         releasePokemon,
         getPokemon,
         caughtPokemon,
-        numberOfSpeciesCaught,
+        numberOfSpeciesCaught: caughtPokemon.length,
         isPokemonCaught,
         exportToCsv,
         updatePokemonNote,
