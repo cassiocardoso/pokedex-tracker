@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useState } from "react";
+import { Fragment, ReactElement } from "react";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import PokemonService from "@/business/application/services/PokemonService";
 import PokemonRepository from "@/business/infrastructure/repositories/PokemonRepository";

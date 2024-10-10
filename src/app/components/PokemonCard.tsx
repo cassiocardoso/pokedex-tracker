@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useState } from "react";
+import { ReactElement, useCallback } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import capitalize from "@/utils/capitalize";
