@@ -32,6 +32,8 @@ export default function PokemonList(): ReactElement {
       };
     },
     placeholderData: keepPreviousData,
+    staleTime: 1000 * 60 * 60, // 1h
+    refetchOnMount: false,
   });
 
   const handleClickLoadMoreButton = async () => {
