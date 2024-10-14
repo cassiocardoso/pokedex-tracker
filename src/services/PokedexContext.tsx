@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { toast } from "react-toastify";
@@ -11,6 +12,7 @@ import PokedexRepository from "@/business/infrastructure/repositories/PokedexRep
 import PokedexService from "@/business/application/services/PokedexService";
 import Pokemon from "@/business/domain/value-objects/Pokemon";
 import Pokedex from "@/business/domain/models/Pokedex";
+import exportPokedexToCsv from "@/utils/exportPokedexToCsv";
 
 interface IPokedexContext {
   catchPokemon: (pokemon: Pokemon) => void;
@@ -41,8 +43,15 @@ const pokedexRepository = new PokedexRepository();
 let pokedexService: PokedexService;
 
 export default function PokedexProvider({ children }: { children: ReactNode }) {
-  const [pokedex, setPokedex] = useState<Pokedex>(new Pokedex());
-  const [caughtPokemon, setCaughtPokemon] = useState<Pokemon[]>([]);
+  const [pokedex, setPokedex] = useState<Pokedex>(() => new Pokedex());
+  const [caughtPokemon, setCaughtPokemon] = useState<Pokemon[]>(() =>
+    pokedex.getAll(),
+  );
+
+  const numberOfSpeciesCaught = useMemo(
+    () => caughtPokemon.length,
+    [caughtPokemon],
+  );
 
   // Hydrate context data from localStorage
   useEffect(() => {
@@ -57,10 +66,7 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
     (pokemon: Pokemon) => {
       if (!pokedex.isPokemonCaught(pokemon.id)) {
         pokedex.add(pokemon);
-
-        const updatedPokemonList = [...pokedex.getAll()];
-        setCaughtPokemon(updatedPokemonList);
-
+        setCaughtPokemon(pokedex.getAll());
         pokedexService.save();
       }
     },
@@ -70,10 +76,7 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
   const releasePokemon = useCallback(
     (pokemonId: number) => {
       pokedex.remove(pokemonId);
-
-      const updatedPokemonList = [...pokedex.getAll()];
-      setCaughtPokemon(updatedPokemonList);
-
+      setCaughtPokemon(pokedex.getAll());
       pokedexService.save();
     },
     [pokedex],
@@ -86,63 +89,31 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
     [],
   );
 
-  const isPokemonCaught = (pokemonId: number): boolean => {
+  const isPokemonCaught = useCallback((pokemonId: number) => {
     return pokedexService.isPokemonCaught(pokemonId);
-  };
+  }, []);
 
-  const exportToCsv = () => {
-    const csvRows = [];
+  const exportToCsv = useCallback(() => {
+    exportPokedexToCsv(caughtPokemon);
+  }, [caughtPokemon]);
 
-    const headers = ["id", "name", "types", "height", "weight", "caughtAt"];
-    csvRows.push(headers.join(","));
-
-    const pokemons = pokedexService.getAllPokemon();
-
-    pokemons.forEach((pokemon) => {
-      const row = [
-        pokemon.id,
-        pokemon.name,
-        pokemon.types.join(";"),
-        pokemon.height,
-        pokemon.weight,
-        pokemon.caughtAt ? pokemon.caughtAt.toISOString() : "",
-      ];
-
-      csvRows.push(row.join(","));
-    });
-
-    const csvContent = csvRows.join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "pokedex.csv";
-    document.body.appendChild(link);
-    link.click();
-
-    // Clean up by removing the link element
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
+  const getPokemonNote = useCallback((pokemonId: number) => {
+    return pokedexService.getPokemonNote(pokemonId);
+  }, []);
 
   const updatePokemonNote = (pokemonId: number, note: string) => {
     pokedexService.updatePokemonNote(pokemonId, note);
     pokedexService.save();
   };
 
-  const getPokemonNote = (pokemonId: number) => {
-    return pokedexService.getPokemonNote(pokemonId);
-  };
-
-  const sharePokedex = async () => {
+  const sharePokedex = useCallback(async () => {
     const serializedData = pokedexService.serialize();
     const link = `${window.location.origin}/share?data=${serializedData}`;
 
     await navigator.clipboard.writeText(link);
 
     toast.success("Pokédex link copied to clipboard");
-  };
+  }, []);
 
   return (
     <PokedexContext.Provider
@@ -151,7 +122,7 @@ export default function PokedexProvider({ children }: { children: ReactNode }) {
         releasePokemon,
         getPokemon,
         caughtPokemon,
-        numberOfSpeciesCaught: caughtPokemon.length,
+        numberOfSpeciesCaught,
         isPokemonCaught,
         exportToCsv,
         updatePokemonNote,

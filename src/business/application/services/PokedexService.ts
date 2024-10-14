@@ -33,15 +33,6 @@ export default class PokedexService {
     }
   }
 
-  getAllPokemon(): Pokemon[] {
-    try {
-      return this.pokedex.getAll();
-    } catch (error) {
-      console.error("Failed to retrieve all Pokémon from the Pokédex:", error);
-      throw new Error("An error occurred while retrieving the Pokémon list.");
-    }
-  }
-
   isPokemonCaught(pokemonId: number): boolean {
     try {
       return this.pokedex.isPokemonCaught(pokemonId);

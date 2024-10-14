@@ -25,10 +25,6 @@ export default class Pokedex {
     return Array.from(this.caughtPokemon);
   }
 
-  getNumberOfSpeciesCaught(): number {
-    return this.caughtPokemon.size;
-  }
-
   getPokemon(pokemonId: number): Pokemon | undefined {
     const pokemonArray = Array.from(this.caughtPokemon);
 
